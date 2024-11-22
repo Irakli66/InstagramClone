@@ -6,8 +6,16 @@
 //
 
 import UIKit
+import NetworkPackage
 
 final class LikesPageViewModel {
+
+    private let networkService: NetworkServiceProtocol
+    
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
+    }
+    
     struct LikeItem {
         let profileImageName: String
         let message: String
