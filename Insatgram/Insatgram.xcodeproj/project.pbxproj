@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CB4E15462CF104B800B2B9CF /* NetworkPackage in Frameworks */ = {isa = PBXBuildFile; productRef = CB4E15452CF104B800B2B9CF /* NetworkPackage */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		CB4E15022CF08AC300B2B9CF /* Insatgram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Insatgram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB4E15462CF104B800B2B9CF /* NetworkPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = Insatgram;
 			packageProductDependencies = (
+				CB4E15452CF104B800B2B9CF /* NetworkPackage */,
 			);
 			productName = Insatgram;
 			productReference = CB4E15022CF08AC300B2B9CF /* Insatgram.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = CB4E14F92CF08AC300B2B9CF;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CB4E15442CF104B800B2B9CF /* XCRemoteSwiftPackageReference "NetworkPackage" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CB4E15032CF08AC300B2B9CF /* Products */;
 			projectDirPath = "";
@@ -333,6 +342,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CB4E15442CF104B800B2B9CF /* XCRemoteSwiftPackageReference "NetworkPackage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Irakli66/NetworkPackage.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CB4E15452CF104B800B2B9CF /* NetworkPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB4E15442CF104B800B2B9CF /* XCRemoteSwiftPackageReference "NetworkPackage" */;
+			productName = NetworkPackage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CB4E14FA2CF08AC300B2B9CF /* Project object */;
 }
