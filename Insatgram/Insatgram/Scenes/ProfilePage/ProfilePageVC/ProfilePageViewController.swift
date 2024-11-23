@@ -9,7 +9,8 @@ import UIKit
 
 final class ProfilePageViewController: UIViewController {
     
-    let viewModel = ProfilePageViewModel()
+    private let infoViewModel = UserInfoViewModel()
+    private let collectionViewModel = CollectionViewModel()
     
     private let userInfoViewController: UserInfoView = {
         let viewController = UserInfoView()
@@ -19,7 +20,7 @@ final class ProfilePageViewController: UIViewController {
     private let userFotoCollectionView: UICollectionView = {
         let collectionLayout = UICollectionViewFlowLayout()
         collectionLayout.scrollDirection = .vertical
-
+        
         let screenWidth = UIScreen.main.bounds.width
         let itemWidth = (screenWidth - 20) / 3
         collectionLayout.itemSize = CGSize(width: itemWidth, height: itemWidth)
@@ -58,7 +59,6 @@ final class ProfilePageViewController: UIViewController {
     private func setupCollectionView() {
         view.addSubview(userFotoCollectionView)
         
-        // Register UICollectionViewCell
         userFotoCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageViewCell")
         
         userFotoCollectionView.dataSource = self
@@ -75,24 +75,20 @@ final class ProfilePageViewController: UIViewController {
 extension ProfilePageViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.droebiti.count
+        return collectionViewModel.imageArrayCount()
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageViewCell", for: indexPath)
-        
-        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-        
-        let imageView = UIImageView(image: viewModel.droebiti[indexPath.row].image)
+        let currentImageUrl = collectionViewModel.getImage(at: indexPath.row)
+        let imageView = UIImageView()
+        imageView.imageFrom(url: URL(string: currentImageUrl)!)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.frame = cell.bounds
         cell.contentView.addSubview(imageView)
-        
         return cell
     }
-}
-
-#Preview {
-    ProfilePageViewController()
 }

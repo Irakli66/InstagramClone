@@ -9,10 +9,11 @@ import UIKit
 
 final class UserInfoView: UIViewController {
     
+    private let infoViewModel = UserInfoViewModel()
+    
     private let userNicknameLabel: UILabel = {
         let name = UILabel()
-        name.text = "andria_gv"
-        name.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        name.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         name.translatesAutoresizingMaskIntoConstraints = false
         return name
     }()
@@ -28,7 +29,7 @@ final class UserInfoView: UIViewController {
     
     private let userImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Profile")
+        imageView.image = UIImage(systemName: "person.fill" )
         imageView.layer.borderWidth = 2.0
         imageView.clipsToBounds = true
         imageView.layer.borderColor = UIColor.gray.cgColor
@@ -42,15 +43,13 @@ final class UserInfoView: UIViewController {
     
     private let userNameLable: UILabel = {
         let name = UILabel()
-        name.text = "Andria Gvaramia"
-        name.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        name.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         name.translatesAutoresizingMaskIntoConstraints = false
         return name
     }()
     
     private let bioLable:  UILabel = {
         let label = UILabel()
-        label.text = "aq daiwe reba ram ame ra ndo muli sisu lele dai we "
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         let itemWidth = UIScreen.main.bounds.width / 2
         label.widthAnchor.constraint(equalToConstant: itemWidth).isActive = true
@@ -65,40 +64,60 @@ final class UserInfoView: UIViewController {
         btn.setTitle("Edit Profile", for: .normal)
         btn.setTitleColor(.black, for: .normal)
         btn.layer.borderWidth = 2.0
-        btn.layer.borderColor = UIColor.gray.cgColor
+        btn.layer.borderColor = UIColor.systemGray3.cgColor
+        btn.backgroundColor = .white
         btn.titleLabel?.textAlignment = .center
         btn.layer.cornerRadius = 10.0
         return btn
     }()
-
     
-    lazy var labelPost = makeLabel(title: "Post", size: 13)
-    lazy var labelFollovers = makeLabel(title: "Follovers", size: 13)
-    lazy var labelFollowing = makeLabel(title: "Following", size: 13)
-    lazy var label54 = makeLabel(title: "  54", size: 16)
-    lazy var label834 = makeLabel(title: "  834", size: 16)
-    lazy var label162 = makeLabel(title: "  162", size: 16)
-
-
-    let horizontalStackView: UIStackView = {
+    private lazy var labelPost = makeLabel(title: "", size: 13)
+    private lazy var labelFollovers = makeLabel(title: "", size: 13)
+    private lazy var labelFollowing = makeLabel(title: "", size: 13)
+    private lazy var postCountLabel = makeLabel(title: "", size: 16)
+    private lazy var folloversCountLabel = makeLabel(title: "", size: 16)
+    private lazy var follovingCountLabel = makeLabel(title: "", size: 16)
+    
+    private let horizontalStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
         stack.alignment = .fill
         stack.distribution = .fill
-        stack.spacing = 15
+        stack.spacing = 20
         stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUi()
     }
     
     private func setupUi() {
-
         setupHorizontalStackView()
         setupMainView()
+        setupUserLables()
+        view.backgroundColor = UIColor(hex: "#FAFAFA")
+    }
+    
+    private func setupUserLables() {
+        guard let user = infoViewModel.getUser() else { return }
+        userNicknameLabel.text = user.username
+        userNameLable.text = user.fullName
+        bioLable.text = user.bio
+        postCountLabel.text = "\(user.counts.media)"
+        folloversCountLabel.text = "\(user.counts.followedBy)"
+        follovingCountLabel.text = "\(user.counts.follows)"
+        
+        if let profilePictureURL = infoViewModel.getUser()?.profilePicture,
+           let url = URL(string: profilePictureURL) {
+            userImage.imageFrom(url: url)
+        } else {
+            print("Profile picture URL is nil or invalid.")
+        }
+        postCountLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        folloversCountLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        follovingCountLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
     }
     
     private func setupMainView() {
@@ -110,10 +129,13 @@ final class UserInfoView: UIViewController {
         view.addSubview(bioLable)
         view.addSubview(editButton)
         
+        userNicknameLabel.text = infoViewModel.getUser()?.username
+        bioLable.text = infoViewModel.getUser()?.bio
+        userNameLable.text = infoViewModel.getUser()?.username
+        
         userImage.layer.cornerRadius = 50
         
         let itemWidth = UIScreen.main.bounds.width / 2
-        
         
         NSLayoutConstraint.activate([
             userNicknameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: itemWidth / 3),
@@ -125,9 +147,9 @@ final class UserInfoView: UIViewController {
             horizontalStackView.topAnchor.constraint(equalTo: userNicknameLabel.topAnchor, constant: 70),
             
             userImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-            userImage.rightAnchor.constraint(equalTo: horizontalStackView.leftAnchor, constant: -30),
+            userImage.rightAnchor.constraint(equalTo: horizontalStackView.leftAnchor, constant: -60),
             userImage.centerYAnchor.constraint(equalTo: horizontalStackView.centerYAnchor),
-
+            
             userNameLable.leadingAnchor.constraint(equalTo: userImage.leadingAnchor),
             userNameLable.topAnchor.constraint(equalTo: userImage.bottomAnchor, constant: 10),
             
@@ -139,16 +161,14 @@ final class UserInfoView: UIViewController {
             editButton.leadingAnchor.constraint(equalTo: userImage.leadingAnchor),
             editButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
             
-            editButton.heightAnchor.constraint(equalToConstant: 40)
-            ])
+            editButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
     }
-        
     
     private func setupHorizontalStackView() {
-        
-        horizontalStackView.addArrangedSubview(addLablesInHorizontalStackView(label1: label54, label2:labelPost ))
-        horizontalStackView.addArrangedSubview(addLablesInHorizontalStackView(label1: label834, label2: labelFollovers))
-        horizontalStackView.addArrangedSubview(addLablesInHorizontalStackView(label1: label162, label2: labelFollowing))
+        horizontalStackView.addArrangedSubview(addLablesInHorizontalStackView(label1: postCountLabel, label2:labelPost ))
+        horizontalStackView.addArrangedSubview(addLablesInHorizontalStackView(label1: folloversCountLabel, label2: labelFollovers))
+        horizontalStackView.addArrangedSubview(addLablesInHorizontalStackView(label1: follovingCountLabel, label2: labelFollowing))
     }
     
     private func makeLabel(title: String, size: CGFloat?) -> UILabel {
@@ -168,10 +188,5 @@ final class UserInfoView: UIViewController {
         stack.addArrangedSubview(label2)
         return stack
     }
-}
-
-
-#Preview() {
-    UserInfoView()
 }
 
