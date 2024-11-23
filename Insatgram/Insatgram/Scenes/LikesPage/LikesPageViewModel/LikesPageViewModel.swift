@@ -5,38 +5,41 @@
 //  Created by irakli kharshiladze on 22.11.24.
 //
 
-import UIKit
-import NetworkPackage
+import Foundation
 
 final class LikesPageViewModel {
-
-    private let networkService: NetworkServiceProtocol
-    
-    init(networkService: NetworkServiceProtocol) {
-        self.networkService = networkService
-    }
-    
     struct LikeItem {
         let profileImageName: String
         let message: String
         let postImageName: String?
     }
 
-    let sections = [
-        ("New", [
-            LikeItem(profileImageName: "test1", message: "karennne liked your photo. 1h", postImageName: "test2")
-        ]),
-        ("Today", [
-            LikeItem(profileImageName: "test3", message: "kiero_d, zackjohn and 26 others liked your photo. 3h", postImageName: "test4")
-        ]),
-        ("This Week", [
-            LikeItem(profileImageName: "test5", message: "craig_love mentioned you in a comment: @jacob_w exactly..", postImageName: "test6"),
-            LikeItem(profileImageName: "test7", message: "martini_rond started following you. 3d", postImageName: nil),
-            LikeItem(profileImageName: "test8", message: "maxjacobson started following you. 3d", postImageName: nil),
-            LikeItem(profileImageName: "test9", message: "mis_potter started following you. 3d", postImageName: nil)
-        ]),
-        ("This Month", [
-            LikeItem(profileImageName: "test10", message: "m_humphrey started following you. 3d", postImageName: nil)
-        ])
-    ]
+    private(set) var sections: [(String, [LikeItem])] = []
+
+    func fetchLikes(completion: @escaping (Bool) -> Void) {
+        guard let url = URL(string: "http://localhost:3000/v1/users/self/requested-by") else {
+            completion(false)
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else {
+                completion(false)
+                return
+            }
+
+            do {
+                let response = try JSONDecoder().decode(UserLikesResponse.self, from: data)
+                self.sections = [("Likes", response.data.map {
+                    LikeItem(profileImageName: $0.profileImageName,
+                             message: $0.message,
+                             postImageName: $0.postImageName)
+                })]
+                completion(true)
+            } catch {
+                print("Decoding Error: \(error)")
+                completion(false)
+            }
+        }.resume()
+    }
 }
