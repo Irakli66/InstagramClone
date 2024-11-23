@@ -8,6 +8,8 @@
 import UIKit
 
 class LikesPageViewController: UIViewController {
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     private let tableView = UITableView()
     private let viewModel = LikesPageViewModel()
     
@@ -16,16 +18,25 @@ class LikesPageViewController: UIViewController {
         setupUI()
         fetchData()
     }
-
+    
     private func setupUI() {
         view.backgroundColor = .white
-        tableView.frame = view.bounds
+        
+        scrollView.frame = view.bounds
+        scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        scrollView.contentSize = CGSize(width: view.bounds.width, height: view.bounds.height + 100)
+        view.addSubview(scrollView)
+        
+        contentView.frame = CGRect(x: 0, y: 0, width: scrollView.contentSize.width, height: scrollView.contentSize.height)
+        scrollView.addSubview(contentView)
+        
+        tableView.frame = contentView.bounds
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "HeaderView")
-        view.addSubview(tableView)
+        contentView.addSubview(tableView)
     }
-
+    
     private func fetchData() {
         viewModel.fetchLikes { [weak self] success in
             if success { DispatchQueue.main.async { self?.tableView.reloadData() } } else { print("Failed to fetch data") }
@@ -44,8 +55,7 @@ extension LikesPageViewController: UITableViewDataSource, UITableViewDelegate {
         header?.textLabel?.textColor = .black
         return header
     }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { return 30 }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "LikesCell")
         let item = viewModel.sections[indexPath.section].1[indexPath.row]
@@ -54,20 +64,29 @@ extension LikesPageViewController: UITableViewDataSource, UITableViewDelegate {
         profileImageView.clipsToBounds = true
         profileImageView.image = UIImage(named: item.profileImageName)
         cell.contentView.addSubview(profileImageView)
-
+        
         let messageLabel = UILabel(frame: CGRect(x: 72, y: 22, width: 230, height: 16))
         messageLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         messageLabel.numberOfLines = 2
         messageLabel.text = item.message
         cell.contentView.addSubview(messageLabel)
-
+        
         if let postImageName = item.postImageName {
             let postImageView = UIImageView(frame: CGRect(x: 315, y: 8, width: 44, height: 44))
             postImageView.image = UIImage(named: postImageName)
             postImageView.clipsToBounds = true
             cell.contentView.addSubview(postImageView)
+        } else {
+            let followButton = FollowButton()
+            followButton.translatesAutoresizingMaskIntoConstraints = false
+            cell.contentView.addSubview(followButton)
+            NSLayoutConstraint.activate([
+                followButton.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 20),
+                followButton.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -10),
+                followButton.widthAnchor.constraint(equalToConstant: 90),
+                followButton.heightAnchor.constraint(equalToConstant: 28)
+            ])
         }
-
         return cell
     }
 }
