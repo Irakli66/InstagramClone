@@ -30,11 +30,29 @@ final class LikesPageViewModel {
 
             do {
                 let response = try JSONDecoder().decode(UserLikesResponse.self, from: data)
-                self.sections = [("Likes", response.data.map {
-                    LikeItem(profileImageName: $0.profileImageName,
-                             message: $0.message,
-                             postImageName: $0.postImageName)
-                })]
+                
+                let newItems = response.data.prefix(2).map {
+                    LikeItem(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
+                }
+                let todayItems = response.data.dropFirst(2).prefix(2).map {
+                    LikeItem(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
+                }
+                
+                let thisWeekItems = response.data.dropFirst(4).prefix(3).map {
+                    LikeItem(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
+                }
+                
+                let thisMonthItems = response.data.dropFirst(7).prefix(1).map {
+                    LikeItem(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
+                }
+                
+                self.sections = [
+                    ("New", newItems),
+                    ("Today", todayItems),
+                    ("This Week", thisWeekItems),
+                    ("This Month", thisMonthItems)
+                ]
+                
                 completion(true)
             } catch {
                 print("Decoding Error: \(error)")
