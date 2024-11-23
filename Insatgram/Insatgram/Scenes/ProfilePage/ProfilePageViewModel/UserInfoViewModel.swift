@@ -14,7 +14,7 @@ final class UserInfoViewModel {
     private var user: User?
     private let userId = 1
     private var urlString: String {
-        return "http://localhost:3000/v1/users/\(userId)"
+        "http://localhost:3000/v1/users/\(userId)"
     }
     
     init(networkService: NetworkServiceProtocol = NetworkService()) {
@@ -29,10 +29,10 @@ final class UserInfoViewModel {
             headers: nil,
             decoder: JSONDecoder()
         ) { (result: Result<UserResponse, NetworkError>) in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
                 switch result {
                 case .success(let userResponse):
-                    self.user = userResponse.data
+                    self?.user = userResponse.data
                 case .failure(let error):
                     print("Error fetching user data: \(error)")
                 }
@@ -41,6 +41,6 @@ final class UserInfoViewModel {
     }
     
     func getUser() -> User? {
-        return user
+        user
     }
 }

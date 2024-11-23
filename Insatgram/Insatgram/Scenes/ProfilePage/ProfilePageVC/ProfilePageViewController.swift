@@ -75,8 +75,7 @@ final class ProfilePageViewController: UIViewController {
 extension ProfilePageViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return collectionViewModel.imageArrayCount()
-        
+        collectionViewModel.imageArrayCount()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -84,7 +83,9 @@ extension ProfilePageViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageViewCell", for: indexPath)
         let currentImageUrl = collectionViewModel.getImage(at: indexPath.row)
         let imageView = UIImageView()
-        imageView.imageFrom(url: URL(string: currentImageUrl)!)
+        if let URL = URL(string: currentImageUrl) {
+            imageView.imageFrom(url: URL)
+        }
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.frame = cell.bounds

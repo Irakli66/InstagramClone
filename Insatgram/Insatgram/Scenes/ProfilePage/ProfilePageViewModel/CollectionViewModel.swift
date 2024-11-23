@@ -9,7 +9,7 @@ import Foundation
 import NetworkPackage
 import UIKit
 
-class CollectionViewModel {
+final class CollectionViewModel {
     private let networkService: NetworkServiceProtocol
     private let urlString = "http://localhost:3000/v1/users/1/media/recent"
     private var imageArray: [String] = []
@@ -25,7 +25,7 @@ class CollectionViewModel {
             httpMethod: "GET",
             headers: nil,
             decoder: JSONDecoder()
-        ) { [weak self] (result: Result<UserMediaResponse, NetworkError>) in
+        ) { (result: Result<UserMediaResponse, NetworkError>) in
             DispatchQueue.main.async { [weak self] in
                 switch result {
                 case .success(let userResponse):
@@ -46,15 +46,3 @@ class CollectionViewModel {
         imageArray.count
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

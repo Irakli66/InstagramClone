@@ -71,9 +71,9 @@ final class UserInfoView: UIViewController {
         return btn
     }()
     
-    private lazy var labelPost = makeLabel(title: "", size: 13)
-    private lazy var labelFollovers = makeLabel(title: "", size: 13)
-    private lazy var labelFollowing = makeLabel(title: "", size: 13)
+    private lazy var labelPost = makeLabel(title: "Post", size: 13)
+    private lazy var labelFollovers = makeLabel(title: "Follovers", size: 13)
+    private lazy var labelFollowing = makeLabel(title: "Following", size: 13)
     private lazy var postCountLabel = makeLabel(title: "", size: 16)
     private lazy var folloversCountLabel = makeLabel(title: "", size: 16)
     private lazy var follovingCountLabel = makeLabel(title: "", size: 16)
