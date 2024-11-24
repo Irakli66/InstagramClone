@@ -9,7 +9,7 @@ import UIKit
 
 final class NewsFeedTableViewCell: UITableViewCell {
     
-    let networkManager = MainPageViewModel()
+    private let networkManager = MainPageViewModel()
     
     private let instagramLogoImage = UIImageView()
     private let postAutorPhoto = UIImageView()
