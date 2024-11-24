@@ -36,6 +36,7 @@ final class NewsFeedTableViewCell: UITableViewCell {
         collectionLayout.itemSize = CGSize(width: itemWidth, height: 407)
         let collection = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
         collection.backgroundColor = .clear
+        collection.isPagingEnabled = true
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
