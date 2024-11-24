@@ -4,60 +4,56 @@
 //
 //  Created by irakli kharshiladze on 22.11.24.
 //
-
+ 
 import Foundation
-
+import NetworkPackage
+ 
 final class LikesPageViewModel {
-    struct LikeItem {
-        let profileImageName: String
-        let message: String
-        let postImageName: String?
+    private let networkService: NetworkServiceProtocol
+    
+    init(networkService: NetworkServiceProtocol = NetworkService()) {
+        self.networkService = networkService
+        fetchData()
     }
-
-    private(set) var sections: [(String, [LikeItem])] = []
-
-    func fetchLikes(completion: @escaping (Bool) -> Void) {
-        guard let url = URL(string: "http://localhost:3000/v1/users/self/requested-by") else {
-            completion(false)
-            return
+    
+    private var userLikeArr: [UserLike] = []
+    
+    private(set) var sections: [(String, [UserLike])] = []
+    
+    private func fetchData(){
+        networkService.fetchData(urlString: "http://localhost:3000/v1/users/self/requested-by", httpMethod: "GET", headers: nil, decoder: JSONDecoder())
+        { [weak self] (result: Result<UserLikesResponse, NetworkError>) in
+            switch result {
+            case .success(let userLikeData):
+                self?.userLikeArr.append(contentsOf: userLikeData.data)
+                self?.addLikesToSections()
+            case .failure(let error):
+                print("Error fetching data: \(error)")
+            }
         }
-
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data, error == nil else {
-                completion(false)
-                return
-            }
-
-            do {
-                let response = try JSONDecoder().decode(UserLikesResponse.self, from: data)
-                
-                let newItems = response.data.prefix(2).map {
-                    LikeItem(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
-                }
-                let todayItems = response.data.dropFirst(2).prefix(2).map {
-                    LikeItem(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
-                }
-                
-                let thisWeekItems = response.data.dropFirst(4).prefix(3).map {
-                    LikeItem(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
-                }
-                
-                let thisMonthItems = response.data.dropFirst(7).prefix(1).map {
-                    LikeItem(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
-                }
-                
-                self.sections = [
-                    ("New", newItems),
-                    ("Today", todayItems),
-                    ("This Week", thisWeekItems),
-                    ("This Month", thisMonthItems)
-                ]
-                
-                completion(true)
-            } catch {
-                print("Decoding Error: \(error)")
-                completion(false)
-            }
-        }.resume()
+    }
+    
+    private func addLikesToSections() {
+        let newItems = userLikeArr.prefix(2).map {
+            UserLike(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
+        }
+        let todayItems = userLikeArr.dropFirst(2).prefix(2).map {
+            UserLike(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
+        }
+        
+        let thisWeekItems = userLikeArr.dropFirst(4).prefix(3).map {
+            UserLike(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
+        }
+        
+        let thisMonthItems = userLikeArr.dropFirst(7).prefix(1).map {
+            UserLike(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
+        }
+        
+        sections = [
+            ("New", newItems),
+            ("Today", todayItems),
+            ("This Week", thisWeekItems),
+            ("This Month", thisMonthItems)
+        ]
     }
 }

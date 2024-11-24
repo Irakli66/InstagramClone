@@ -4,10 +4,10 @@
 //
 //  Created by irakli kharshiladze on 22.11.24.
 //
-
+ 
 import UIKit
-
-class LikesPageViewController: UIViewController {
+ 
+final class LikesPageViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let tableView = UITableView()
@@ -16,7 +16,6 @@ class LikesPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        fetchData()
     }
     
     private func setupUI() {
@@ -36,14 +35,7 @@ class LikesPageViewController: UIViewController {
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "HeaderView")
         contentView.addSubview(tableView)
     }
-    
-    private func fetchData() {
-        viewModel.fetchLikes { [weak self] success in
-            if success { DispatchQueue.main.async { self?.tableView.reloadData() } } else { print("Failed to fetch data") }
-        }
-    }
-}
-
+} 
 extension LikesPageViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int { return viewModel.sections.count }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { return viewModel.sections[section].1.count }
