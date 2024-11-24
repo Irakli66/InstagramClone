@@ -9,7 +9,7 @@ import UIKit
 
 final class NewsFeedTableViewCell: UITableViewCell {
     
-    private let networkManager = MainPageViewModel()
+    private let mainViewModel = MainPageViewModel()
     
     private let instagramLogoImage = UIImageView()
     private let postAutorPhoto = UIImageView()
@@ -283,7 +283,7 @@ final class NewsFeedTableViewCell: UITableViewCell {
         postDetailsLikelabel.text = "Liked by \(post.likes.data[0].username) and \(post.likes.count) others"
         postTextLabelUserName.text = post.caption?.from.username ?? ""
         postText.text = post.caption?.text ?? ""
-        postDetailsDateLabel.text = post.caption?.createdTime
+        postDetailsDateLabel.text = mainViewModel.dataFormat(with: post.caption?.createdTime ?? "")
         currentPageLabel.text = post.images.count > 1 ? "1 \(post.images.count)" : ""
         if  post.images.count > 1 {
             currentPageLabel.text = "1/\(post.images.count)"
