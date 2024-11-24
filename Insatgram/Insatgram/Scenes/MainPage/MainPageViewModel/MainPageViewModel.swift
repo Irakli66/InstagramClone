@@ -8,19 +8,22 @@
 
 import NetworkPackage
 import Foundation
+import DateFormatterService
 
 final class MainPageViewModel {
     
     var postsCanged: ( () -> Void)?
     
+    private let customDateFormatter: CustomDateFormatterProtocol
     private let networkService: NetworkServiceProtocol
     private var posts: [Post] = []
     private var urlString: String {
         "http://localhost:3000/v1/users/self/feed"
     }
     
-    init(networkService: NetworkServiceProtocol = NetworkService()) {
+    init(networkService: NetworkServiceProtocol = NetworkService(), customDateFormatter: CustomDateFormatterProtocol = CustomDateFormatter()) {
         self.networkService = networkService
+        self.customDateFormatter = customDateFormatter
         fetchUserData()
     }
     
@@ -51,6 +54,10 @@ final class MainPageViewModel {
     
     func collectionImagesCount(at index: Int) -> Int {
         posts[index].images.count
+    }
+    
+    func dataFormat(with data: String) -> String {
+        customDateFormatter.formattedDate(from: data, inputFormat: "yyyy-MM-dd'T'HH:mm:ssZ", outputFormat: "EEEE, d")
     }
 }
 

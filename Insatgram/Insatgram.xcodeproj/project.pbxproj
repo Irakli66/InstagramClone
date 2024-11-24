@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18DBFC682CF3C2E600F24865 /* DateFormatterService in Frameworks */ = {isa = PBXBuildFile; productRef = 18DBFC672CF3C2E600F24865 /* DateFormatterService */; };
 		CB4E15462CF104B800B2B9CF /* NetworkPackage in Frameworks */ = {isa = PBXBuildFile; productRef = CB4E15452CF104B800B2B9CF /* NetworkPackage */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB4E15462CF104B800B2B9CF /* NetworkPackage in Frameworks */,
+				18DBFC682CF3C2E600F24865 /* DateFormatterService in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 			name = Insatgram;
 			packageProductDependencies = (
 				CB4E15452CF104B800B2B9CF /* NetworkPackage */,
+				18DBFC672CF3C2E600F24865 /* DateFormatterService */,
 			);
 			productName = Insatgram;
 			productReference = CB4E15022CF08AC300B2B9CF /* Insatgram.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				CB4E15442CF104B800B2B9CF /* XCRemoteSwiftPackageReference "NetworkPackage" */,
+				18DBFC662CF3C2E600F24865 /* XCRemoteSwiftPackageReference "DateFormatterService" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CB4E15032CF08AC300B2B9CF /* Products */;
@@ -344,6 +348,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		18DBFC662CF3C2E600F24865 /* XCRemoteSwiftPackageReference "DateFormatterService" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/andriagv/DateFormatterService.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		CB4E15442CF104B800B2B9CF /* XCRemoteSwiftPackageReference "NetworkPackage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Irakli66/NetworkPackage.git";
@@ -355,6 +367,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		18DBFC672CF3C2E600F24865 /* DateFormatterService */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18DBFC662CF3C2E600F24865 /* XCRemoteSwiftPackageReference "DateFormatterService" */;
+			productName = DateFormatterService;
+		};
 		CB4E15452CF104B800B2B9CF /* NetworkPackage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CB4E15442CF104B800B2B9CF /* XCRemoteSwiftPackageReference "NetworkPackage" */;
