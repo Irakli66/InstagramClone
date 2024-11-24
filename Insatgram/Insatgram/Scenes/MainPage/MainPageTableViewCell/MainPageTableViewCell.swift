@@ -7,11 +7,11 @@
 
 import UIKit
 
-class NewsFeedTableViewCell: UITableViewCell {
+final class NewsFeedTableViewCell: UITableViewCell {
     
+    let networkManager = MainPageViewModel()
     
     private let instagramLogoImage = UIImageView()
-    private let pageViewController = PageViewController()
     private let postAutorPhoto = UIImageView()
     private let postAutorName = UILabel()
     private let postLocation = UILabel()
@@ -21,9 +21,11 @@ class NewsFeedTableViewCell: UITableViewCell {
     private let forwardButton = UIButton(type: .custom)
     private let postDetailsPhoto = UIImageView()
     private let postDetailsLikelabel = UILabel()
-    private let postDetailsCommentLabel = UILabel()
+    private let postTextLabelUserName = UILabel()
+    private let postText = UILabel()
     private let postDetailsDateLabel = UILabel()
     
+    var post: Post?
     
     private lazy var newsFeedPhotosCollectionView: UICollectionView = {
         
@@ -39,15 +41,15 @@ class NewsFeedTableViewCell: UITableViewCell {
     }()
     
     private let postAutorView: UIView = {
-        let pav = UIView()
-        pav.backgroundColor = .white
-        return pav
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
     }()
     
     private let viewForButtons: UIView = {
-        let vfb = UIView()
-        vfb.backgroundColor = .white
-        return vfb
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
     }()
     
     private let pageControl: UIPageControl = {
@@ -59,9 +61,9 @@ class NewsFeedTableViewCell: UITableViewCell {
     }()
     
     private let viewForPostDetails: UIStackView = {
-        let vfpd = UIStackView()
-        vfpd.backgroundColor = .white
-        return vfpd
+        let stackView = UIStackView()
+        stackView.backgroundColor = .white
+        return stackView
     }()
     
     private let currentPageLabel: UILabel = {
@@ -86,15 +88,10 @@ class NewsFeedTableViewCell: UITableViewCell {
     }
     
     private func setupUI() {
-        
         setupPostAutorView()
         setupMainCollectionView()
         setupViewForButtons()
         setupViewForPostDetails()
-        NSLayoutConstraint.activate([
-            
-            
-        ])
     }
     
     private func setupPostAutorView() {
@@ -103,17 +100,15 @@ class NewsFeedTableViewCell: UITableViewCell {
         
         postAutorView.addSubview(postAutorPhoto)
         postAutorPhoto.translatesAutoresizingMaskIntoConstraints = false
-        postAutorPhoto.image = UIImage(named: "MainPagePostAutorPhoto")
+        postAutorPhoto.clipsToBounds = true
         
         postAutorView.addSubview(postAutorName)
         postAutorName.translatesAutoresizingMaskIntoConstraints = false
-        postAutorName.text = "joshua_I"
         postAutorName.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         postAutorName.textColor = .black
         
         postAutorView.addSubview(postLocation)
         postLocation.translatesAutoresizingMaskIntoConstraints = false
-        postLocation.text = "Tokyo, Japan"
         postLocation.font = UIFont.systemFont(ofSize: 11, weight: .regular)
         postLocation.textColor = .black
         
@@ -152,9 +147,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         newsFeedPhotosCollectionView.register(MainPageCollectionViewCell.self, forCellWithReuseIdentifier: "MainPageCollectionViewCell")
         newsFeedPhotosCollectionView.delegate = self
         newsFeedPhotosCollectionView.dataSource = self
-        
         contentView.addSubview(currentPageLabel)
-        currentPageLabel.text = "1/3" // Initial text
         
         NSLayoutConstraint.activate([
             
@@ -169,7 +162,6 @@ class NewsFeedTableViewCell: UITableViewCell {
             currentPageLabel.heightAnchor.constraint(equalToConstant: 28)
         ])
     }
-    
     
     private func setupViewForButtons() {
         contentView.addSubview(viewForButtons)
@@ -193,7 +185,6 @@ class NewsFeedTableViewCell: UITableViewCell {
         forwardButton.setImage(UIImage(named: "ForwardIcon"), for: .normal)
         forwardButton.tintColor = .black
         
-        pageControl.numberOfPages = 3
         pageControl.currentPage = 0
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         viewForButtons.addSubview(pageControl)
@@ -231,25 +222,29 @@ class NewsFeedTableViewCell: UITableViewCell {
         
         viewForPostDetails.addSubview(postDetailsPhoto)
         postDetailsPhoto.translatesAutoresizingMaskIntoConstraints = false
-        postDetailsPhoto.image = UIImage(named: "MainPagePostAutorPhoto")
+        postDetailsPhoto.clipsToBounds = true
         
         viewForPostDetails.addSubview(postDetailsLikelabel)
         postDetailsLikelabel.translatesAutoresizingMaskIntoConstraints = false
-        postDetailsLikelabel.text = "Liked by craig_love and 44,686 others"
         postDetailsLikelabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         postDetailsLikelabel.textColor = .black
         
-        viewForPostDetails.addSubview(postDetailsCommentLabel)
-        postDetailsCommentLabel.translatesAutoresizingMaskIntoConstraints = false
-        postDetailsCommentLabel.text = "joshua_l The game in Japan was amazing and I want to share some photos"
-        postDetailsCommentLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        postDetailsCommentLabel.numberOfLines = 0
-        postDetailsCommentLabel.sizeToFit()
-        postDetailsCommentLabel.textColor = .black
+        viewForPostDetails.addSubview(postTextLabelUserName)
+        postTextLabelUserName.translatesAutoresizingMaskIntoConstraints = false
+        postTextLabelUserName.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        postTextLabelUserName.numberOfLines = 0
+        postTextLabelUserName.sizeToFit()
+        postTextLabelUserName.textColor = .black
+        
+        viewForPostDetails.addSubview(postText)
+        postText.translatesAutoresizingMaskIntoConstraints = false
+        postText.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        postText.numberOfLines = 0
+        postText.sizeToFit()
+        postText.textColor = .black
         
         viewForPostDetails.addSubview(postDetailsDateLabel)
         postDetailsDateLabel.translatesAutoresizingMaskIntoConstraints = false
-        postDetailsDateLabel.text = "September 19"
         postDetailsDateLabel.font = UIFont.systemFont(ofSize: 11, weight: .regular)
         postDetailsDateLabel.textColor = .gray
         
@@ -268,27 +263,58 @@ class NewsFeedTableViewCell: UITableViewCell {
             postDetailsLikelabel.topAnchor.constraint(equalTo: postDetailsPhoto.topAnchor),
             postDetailsLikelabel.leftAnchor.constraint(equalTo: postDetailsPhoto.rightAnchor, constant: 6.5),
             
-            postDetailsCommentLabel.topAnchor.constraint(equalTo: postDetailsPhoto.bottomAnchor, constant: 5),
-            postDetailsCommentLabel.leftAnchor.constraint(equalTo: postDetailsPhoto.leftAnchor),
-            postDetailsCommentLabel.rightAnchor.constraint(equalTo: viewForPostDetails.rightAnchor, constant: 14),
+            postTextLabelUserName.topAnchor.constraint(equalTo: postDetailsPhoto.bottomAnchor, constant: 5),
+            postTextLabelUserName.leftAnchor.constraint(equalTo: postDetailsPhoto.leftAnchor),
             
-            postDetailsDateLabel.topAnchor.constraint(equalTo: postDetailsCommentLabel.bottomAnchor, constant: 13),
+            postText.centerYAnchor.constraint(equalTo: postTextLabelUserName.centerYAnchor),
+            postText.leftAnchor.constraint(equalTo: postTextLabelUserName.rightAnchor, constant: 5),
+            
+            postDetailsDateLabel.topAnchor.constraint(equalTo: postTextLabelUserName.bottomAnchor, constant: 13),
             postDetailsDateLabel.leftAnchor.constraint(equalTo: postDetailsPhoto.leftAnchor),
         ])
     }
     
+    func configureCell(post: Post) {
+        
+        postAutorPhoto.imageFrom(url: URL(string: (post.caption?.from.profilePicture)!)!)
+        postDetailsPhoto.imageFrom(url: URL(string: (post.likes.data[0].profilePicture))!)
+        postAutorName.text = post.caption?.from.username
+        postLocation.text = post.location?.name
+        postDetailsLikelabel.text = "Liked by \(post.likes.data[0].username) and \(post.likes.count) others"
+        postTextLabelUserName.text = post.caption?.from.username ?? ""
+        postText.text = post.caption?.text ?? ""
+        postDetailsDateLabel.text = post.caption?.createdTime
+        currentPageLabel.text = post.images.count > 1 ? "1 \(post.images.count)" : ""
+        if  post.images.count > 1 {
+            currentPageLabel.text = "1/\(post.images.count)"
+        } else {
+            currentPageLabel.isHidden = true
+        }
+        pageControl.numberOfPages = post.images.count
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        postAutorPhoto.layer.cornerRadius = postAutorPhoto.frame.size.width / 2
+        postDetailsPhoto.layer.cornerRadius = postDetailsPhoto.frame.size.width / 2
+    }
 }
-
 
 extension NewsFeedTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        3
+        post?.images.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainPageCollectionViewCell", for: indexPath) as! MainPageCollectionViewCell
         let currentPage = Int(round(collectionView.contentOffset.x / collectionView.bounds.width))
         pageControl.currentPage = currentPage
+        if let imageURLString = post?.images[indexPath.row].imageURL,
+           let imageURL = URL(string: imageURLString) {
+            cell.postPhoto.imageFrom(url: imageURL)
+        } else {
+            print("Invalid image URL")
+        }
         return cell
     }
     
@@ -298,4 +324,5 @@ extension NewsFeedTableViewCell: UICollectionViewDataSource, UICollectionViewDel
         currentPageLabel.text = "\(currentPage + 1)/\(pageControl.numberOfPages)"
         pageControl.currentPage = currentPage
     }
+    
 }

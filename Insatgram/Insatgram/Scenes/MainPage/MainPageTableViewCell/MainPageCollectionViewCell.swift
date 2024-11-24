@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainPageCollectionViewCell: UICollectionViewCell {
+final class MainPageCollectionViewCell: UICollectionViewCell {
     
     let postPhoto: UIImageView = {
         let imageView = UIImageView()
@@ -28,7 +28,6 @@ class MainPageCollectionViewCell: UICollectionViewCell {
     private func setupUI() {
         contentView.addSubview(postPhoto)
         postPhoto.translatesAutoresizingMaskIntoConstraints = false
-        postPhoto.image = UIImage(named: "MainPagePostAutorPhoto")
         
         NSLayoutConstraint.activate([
             postPhoto.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -37,7 +36,7 @@ class MainPageCollectionViewCell: UICollectionViewCell {
             postPhoto.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
-    
 }
+
 
 

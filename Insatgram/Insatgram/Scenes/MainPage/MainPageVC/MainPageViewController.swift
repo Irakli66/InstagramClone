@@ -11,6 +11,8 @@ final class MainPageViewController: UIViewController {
         
     private let instagramLogoImage = UIImageView()
     
+    private let mainPageViewModel = MainPageViewModel()
+    
     private lazy var newsFeedTableView: UITableView = {
         let tableview = UITableView()
         tableview.delegate = self
@@ -19,29 +21,6 @@ final class MainPageViewController: UIViewController {
         tableview.backgroundColor = .white
         return tableview
     }()
-    
-//    private lazy var newsFeedPhotosCollectionView: UICollectionView = {
-////        let collectionView = UICollectionView()
-////        collectionView.delegate = self
-////        collectionView.dataSource = self
-////        collectionView.translatesAutoresizingMaskIntoConstraints = false
-////        
-////        collectionView.scrollIndicatorInsets
-////        collectionView.backgroundColor = .red
-////        return collectionView
-//        
-//        let collectionLayout = UICollectionViewFlowLayout()
-//        collectionLayout.scrollDirection = .horizontal
-//        
-//        let screenWidth = UIScreen.main.bounds.width
-//        let itemWidth = screenWidth
-//        collectionLayout.itemSize = CGSize(width: itemWidth, height: 407)
-//        
-//        let collection = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
-//        collection.backgroundColor = .clear
-//        collection.translatesAutoresizingMaskIntoConstraints = false
-//        return collection
-//    }()
     
     private let headerView: UIView = {
         let hv = UIView()
@@ -52,14 +31,16 @@ final class MainPageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        mainPageViewModel.postsCanged = { [weak self] in
+            self?.newsFeedTableView.reloadData()
+        }
     }
     
     private func setupUI() {
-        self.view.backgroundColor = .cyan
+        self.view.backgroundColor = .white
         
         setupHeaderView()
         setupMainTableView()
-        //setupMainCollectionView()
     }
     
     private func setupHeaderView() {
@@ -72,7 +53,7 @@ final class MainPageViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             
-            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
             headerView.leftAnchor.constraint(equalTo: view.leftAnchor),
             headerView.rightAnchor.constraint(equalTo: view.rightAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 44),
@@ -83,42 +64,29 @@ final class MainPageViewController: UIViewController {
         ])
     }
     
-    
     private func setupMainTableView() {
         view.addSubview(newsFeedTableView)
         newsFeedTableView.register(NewsFeedTableViewCell.self, forCellReuseIdentifier: "NewsFeedTableViewCell")
 
         NSLayoutConstraint.activate([
-            
             newsFeedTableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             newsFeedTableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             newsFeedTableView.rightAnchor.constraint(equalTo: view.rightAnchor),
             newsFeedTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
-    
-//    private func setupMainCollectionView() {
-//        view.addSubview(newsFeedPhotosCollectionView)
-//        newsFeedPhotosCollectionView.register(MainPageCollectionViewCell.self, forCellWithReuseIdentifier: "MainPageCollectionViewCell")
-//
-//        NSLayoutConstraint.activate([
-//            
-//            newsFeedPhotosCollectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-//            newsFeedPhotosCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-//            newsFeedPhotosCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
-//            newsFeedPhotosCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-//        ])
-//    }
-        
 }
 
 extension MainPageViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
+        mainPageViewModel.postCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsFeedTableViewCell", for: indexPath) as! NewsFeedTableViewCell
+        let currentPost = mainPageViewModel.getPost(at: indexPath.row)
+        cell.configureCell(post: currentPost)
+        cell.post = currentPost
         return cell
     }
     
@@ -128,14 +96,3 @@ extension MainPageViewController: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-
-//extension MainPageViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        3
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainPageCollectionViewCell", for: indexPath) as! MainPageCollectionViewCell
-//        return cell
-//    }
-//}
