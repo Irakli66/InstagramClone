@@ -42,7 +42,7 @@ final class MainPageViewModel {
     }
     
     func getPost(at index: Int) -> Post {
-        return posts[index]
+        posts[index]
     }
     
     func postCount() -> Int {
