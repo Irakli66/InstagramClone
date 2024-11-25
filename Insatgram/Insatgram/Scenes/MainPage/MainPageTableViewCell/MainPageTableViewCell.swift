@@ -10,7 +10,7 @@ import UIKit
 final class NewsFeedTableViewCell: UITableViewCell {
     
     private let mainViewModel = MainPageViewModel()
-    
+    var onLikeButtonTapped: (() -> Void)?
     private let instagramLogoImage = UIImageView()
     private let postAutorPhoto = UIImageView()
     private let postAutorName = UILabel()
@@ -93,6 +93,15 @@ final class NewsFeedTableViewCell: UITableViewCell {
         setupMainCollectionView()
         setupViewForButtons()
         setupViewForPostDetails()
+        setupLikeButton()
+    }
+    
+    private func setupLikeButton() {
+        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func likeButtonTapped() {
+        onLikeButtonTapped?()
     }
     
     private func setupPostAutorView() {
@@ -139,7 +148,6 @@ final class NewsFeedTableViewCell: UITableViewCell {
             postAutorOfficialIcon.leftAnchor.constraint(equalTo: postAutorName.rightAnchor, constant: 3),
             postAutorOfficialIcon.heightAnchor.constraint(equalToConstant: 10),
             postAutorOfficialIcon.widthAnchor.constraint(equalToConstant: 10),
-            
         ])
     }
     
@@ -162,6 +170,11 @@ final class NewsFeedTableViewCell: UITableViewCell {
             currentPageLabel.widthAnchor.constraint(equalToConstant: 34),
             currentPageLabel.heightAnchor.constraint(equalToConstant: 28)
         ])
+    }
+    
+    private func updateButton() {
+        let imageName = post?.userHasLiked == true ? "HeartFill" : "Heart"
+        likeButton.setImage(UIImage(named: imageName), for: .normal)
     }
     
     private func setupViewForButtons() {
@@ -292,6 +305,7 @@ final class NewsFeedTableViewCell: UITableViewCell {
             currentPageLabel.isHidden = true
         }
         pageControl.numberOfPages = post.images.count
+        updateButton()
     }
     
     override func layoutSubviews() {

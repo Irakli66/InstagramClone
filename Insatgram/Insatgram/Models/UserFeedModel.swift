@@ -21,7 +21,7 @@ struct Post: Decodable {
     let link: String
     let location: Location?
     let user: UserMain
-    let userHasLiked: Bool
+    var userHasLiked: Bool
     let usersInPhoto: [UserInPhoto]?
 
     enum CodingKeys: String, CodingKey {

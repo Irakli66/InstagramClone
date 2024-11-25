@@ -59,5 +59,10 @@ final class MainPageViewModel {
     func dataFormat(with data: String) -> String {
         customDateFormatter.formattedDate(from: data, inputFormat: "yyyy-MM-dd'T'HH:mm:ssZ", outputFormat: "EEEE, d")
     }
+    
+    func toggleLike(forPostAt index: Int) {
+            guard posts.indices.contains(index) else { return }
+            posts[index].userHasLiked.toggle()
+        }
 }
 
