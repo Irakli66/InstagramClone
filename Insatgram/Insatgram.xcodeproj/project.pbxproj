@@ -11,7 +11,18 @@
 		CB4E15462CF104B800B2B9CF /* NetworkPackage in Frameworks */ = {isa = PBXBuildFile; productRef = CB4E15452CF104B800B2B9CF /* NetworkPackage */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		CB08AB1E2CF4B7DE008DA109 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CB4E14FA2CF08AC300B2B9CF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CB4E15012CF08AC300B2B9CF;
+			remoteInfo = Insatgram;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		CB08AB1A2CF4B7DE008DA109 /* InsatgramTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InsatgramTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB4E15022CF08AC300B2B9CF /* Insatgram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Insatgram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -26,6 +37,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		CB08AB1B2CF4B7DE008DA109 /* InsatgramTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = InsatgramTests;
+			sourceTree = "<group>";
+		};
 		CB4E15042CF08AC300B2B9CF /* Insatgram */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -37,6 +53,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		CB08AB172CF4B7DE008DA109 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CB4E14FF2CF08AC300B2B9CF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -53,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				CB4E15042CF08AC300B2B9CF /* Insatgram */,
+				CB08AB1B2CF4B7DE008DA109 /* InsatgramTests */,
 				CB4E15032CF08AC300B2B9CF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				CB4E15022CF08AC300B2B9CF /* Insatgram.app */,
+				CB08AB1A2CF4B7DE008DA109 /* InsatgramTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -68,6 +93,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		CB08AB192CF4B7DE008DA109 /* InsatgramTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB08AB222CF4B7DF008DA109 /* Build configuration list for PBXNativeTarget "InsatgramTests" */;
+			buildPhases = (
+				CB08AB162CF4B7DE008DA109 /* Sources */,
+				CB08AB172CF4B7DE008DA109 /* Frameworks */,
+				CB08AB182CF4B7DE008DA109 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CB08AB1F2CF4B7DE008DA109 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				CB08AB1B2CF4B7DE008DA109 /* InsatgramTests */,
+			);
+			name = InsatgramTests;
+			packageProductDependencies = (
+			);
+			productName = InsatgramTests;
+			productReference = CB08AB1A2CF4B7DE008DA109 /* InsatgramTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		CB4E15012CF08AC300B2B9CF /* Insatgram */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CB4E15152CF08AC500B2B9CF /* Build configuration list for PBXNativeTarget "Insatgram" */;
@@ -102,6 +150,10 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					CB08AB192CF4B7DE008DA109 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = CB4E15012CF08AC300B2B9CF;
+					};
 					CB4E15012CF08AC300B2B9CF = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -126,11 +178,19 @@
 			projectRoot = "";
 			targets = (
 				CB4E15012CF08AC300B2B9CF /* Insatgram */,
+				CB08AB192CF4B7DE008DA109 /* InsatgramTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CB08AB182CF4B7DE008DA109 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CB4E15002CF08AC300B2B9CF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -141,6 +201,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		CB08AB162CF4B7DE008DA109 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CB4E14FE2CF08AC300B2B9CF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -150,7 +217,51 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		CB08AB1F2CF4B7DE008DA109 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CB4E15012CF08AC300B2B9CF /* Insatgram */;
+			targetProxy = CB08AB1E2CF4B7DE008DA109 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		CB08AB202CF4B7DE008DA109 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CS532A644D;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tbc.InsatgramTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Insatgram.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Insatgram";
+			};
+			name = Debug;
+		};
+		CB08AB212CF4B7DE008DA109 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CS532A644D;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = tbc.InsatgramTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Insatgram.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Insatgram";
+			};
+			name = Release;
+		};
 		CB4E15162CF08AC500B2B9CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -327,6 +438,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CB08AB222CF4B7DF008DA109 /* Build configuration list for PBXNativeTarget "InsatgramTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB08AB202CF4B7DE008DA109 /* Debug */,
+				CB08AB212CF4B7DE008DA109 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CB4E14FD2CF08AC300B2B9CF /* Build configuration list for PBXProject "Insatgram" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
