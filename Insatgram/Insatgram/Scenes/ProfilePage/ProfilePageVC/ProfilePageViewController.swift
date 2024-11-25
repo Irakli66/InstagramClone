@@ -12,6 +12,18 @@ final class ProfilePageViewController: UIViewController {
     private let infoViewModel = UserInfoViewModel()
     private let collectionViewModel = CollectionViewModel()
     
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     private let userInfoViewController: UserInfoView = {
         let viewController = UserInfoView()
         return viewController
@@ -37,37 +49,57 @@ final class ProfilePageViewController: UIViewController {
     }
     
     private func setupUi() {
+        setupScrollView()
         setupUserInfoView()
         setupCollectionView()
     }
     
+    private func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        NSLayoutConstraint.activate([
+            
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor , constant: -10),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+    }
+    
     private func setupUserInfoView() {
         addChild(userInfoViewController)
-        view.addSubview(userInfoViewController.view)
-        userInfoViewController.view.frame = view.bounds
+        contentView.addSubview(userInfoViewController.view)
         userInfoViewController.view.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            userInfoViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            userInfoViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            userInfoViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            userInfoViewController.view.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.52)
+            userInfoViewController.view.topAnchor.constraint(equalTo: contentView.topAnchor, constant: -50),
+            userInfoViewController.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            userInfoViewController.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            userInfoViewController.view.heightAnchor.constraint(equalToConstant: 380)
         ])
         userInfoViewController.didMove(toParent: self)
     }
     
     private func setupCollectionView() {
-        view.addSubview(userFotoCollectionView)
+        
+        contentView.addSubview(userFotoCollectionView)
         
         userFotoCollectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "ImageViewCell")
-        
         userFotoCollectionView.dataSource = self
         
         NSLayoutConstraint.activate([
-            userFotoCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            userFotoCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            userFotoCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            userFotoCollectionView.topAnchor.constraint(equalTo: userInfoViewController.view.bottomAnchor)
+            userFotoCollectionView.topAnchor.constraint(equalTo: userInfoViewController.view.bottomAnchor, constant: 10),
+            userFotoCollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            userFotoCollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            userFotoCollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            userFotoCollectionView.heightAnchor.constraint(equalToConstant: 400)
         ])
     }
 }
@@ -93,3 +125,4 @@ extension ProfilePageViewController: UICollectionViewDataSource {
         return cell
     }
 }
+
