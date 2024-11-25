@@ -101,7 +101,9 @@ final class SearchPageViewController: UIViewController {
         collectionView?.register(PhotoCollectionViewCell.self, forCellWithReuseIdentifier: PhotoCollectionViewCell.identifier)
         collectionView?.delegate = self
         collectionView?.dataSource = self
-        guard let collectionView = collectionView else { return }
+        guard let collectionView = collectionView else {
+            return
+        }
         view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -177,7 +179,9 @@ extension SearchPageViewController: UISearchBarDelegate {
     }
     
     @objc private func handleTypingFinished(_ timer: Timer) {
-        guard let searchText = timer.userInfo as? String else { return }
+        guard let searchText = timer.userInfo as? String else {
+            return
+        }
         query(searchText)
     }
     
@@ -210,7 +214,8 @@ extension SearchPageViewController: UICollectionViewDelegate, UICollectionViewDa
             return UICollectionViewCell()
         }
         let currentImage = searchPageViewModel.getImage(at: indexPath.row)
-        cell.configure(with: currentImage)
+        let showOverlay = Bool.random()
+        cell.configure(with: currentImage, showOverlay: showOverlay)
         return cell
     }
 }
@@ -225,3 +230,4 @@ extension SearchPageViewController: UICollectionViewDelegateFlowLayout {
         }
     }
 }
+
