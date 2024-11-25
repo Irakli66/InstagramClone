@@ -26,6 +26,7 @@ final class NewsFeedTableViewCell: UITableViewCell {
     private let postDetailsDateLabel = UILabel()
     
     var post: Post?
+    weak var parentViewController: UIViewController?
     
     private lazy var newsFeedPhotosCollectionView: UICollectionView = {
         
@@ -228,6 +229,12 @@ final class NewsFeedTableViewCell: UITableViewCell {
             pageControl.centerYAnchor.constraint(equalTo: viewForButtons.safeAreaLayoutGuide.centerYAnchor),
             pageControl.centerXAnchor.constraint(equalTo: viewForButtons.centerXAnchor)
         ])
+        
+        forwardButton.accessibilityLabel = "Share this content"
+        forwardButton.addAction(UIAction(handler: { [weak self] action in
+            guard let self = self else { return }
+            self.shareContent()
+        }), for: .touchUpInside)
     }
     
     private func setupViewForPostDetails() {
@@ -306,6 +313,16 @@ final class NewsFeedTableViewCell: UITableViewCell {
         }
         pageControl.numberOfPages = post.images.count
         updateButton()
+    }
+    
+    func shareContent() {
+        let textToShare = "https://instagram.com/\(post?.caption?.from.username ?? "")"
+        let imageToShare = UIImage(named: "exampleImage")
+        let urlToShare = URL(string: "https://instagram.com/\(post?.caption?.from.username ?? "")")
+        let items: [Any] = [textToShare, imageToShare as Any, urlToShare as Any].compactMap { $0 }
+        let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        activityViewController.excludedActivityTypes = [.addToReadingList, .assignToContact]
+        parentViewController?.present(activityViewController, animated: true)
     }
     
     override func layoutSubviews() {

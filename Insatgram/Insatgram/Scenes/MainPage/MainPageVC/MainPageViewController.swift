@@ -94,6 +94,7 @@ extension MainPageViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
         
+        cell.parentViewController = self
         return cell
     }
     
