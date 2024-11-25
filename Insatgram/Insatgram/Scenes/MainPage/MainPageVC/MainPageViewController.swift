@@ -88,12 +88,6 @@ extension MainPageViewController: UITableViewDataSource, UITableViewDelegate {
         cell.post = currentPost
         cell.configureCell(post: currentPost)
         
-        cell.onLikeButtonTapped = { [weak self] in
-            guard let self = self else { return }
-            self.mainPageViewModel.toggleLike(forPostAt: indexPath.row)
-            tableView.reloadRows(at: [indexPath], with: .automatic)
-        }
-        
         cell.parentViewController = self
         return cell
     }

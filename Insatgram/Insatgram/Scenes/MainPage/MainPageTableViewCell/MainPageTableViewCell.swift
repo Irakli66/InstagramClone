@@ -10,7 +10,6 @@ import UIKit
 final class NewsFeedTableViewCell: UITableViewCell {
     
     private let mainViewModel = MainPageViewModel()
-    var onLikeButtonTapped: (() -> Void)?
     private let instagramLogoImage = UIImageView()
     private let postAutorPhoto = UIImageView()
     private let postAutorName = UILabel()
@@ -94,15 +93,6 @@ final class NewsFeedTableViewCell: UITableViewCell {
         setupMainCollectionView()
         setupViewForButtons()
         setupViewForPostDetails()
-        setupLikeButton()
-    }
-    
-    private func setupLikeButton() {
-        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
-    }
-    
-    @objc private func likeButtonTapped() {
-        onLikeButtonTapped?()
     }
     
     private func setupPostAutorView() {
@@ -229,6 +219,12 @@ final class NewsFeedTableViewCell: UITableViewCell {
             pageControl.centerYAnchor.constraint(equalTo: viewForButtons.safeAreaLayoutGuide.centerYAnchor),
             pageControl.centerXAnchor.constraint(equalTo: viewForButtons.centerXAnchor)
         ])
+        
+        likeButton.addAction(UIAction(handler: { [weak self] action in
+            guard let self = self else { return }
+            self.post?.userHasLiked.toggle()
+            self.updateButton()
+        }), for: .touchUpInside)
         
         forwardButton.accessibilityLabel = "Share this content"
         forwardButton.addAction(UIAction(handler: { [weak self] action in
