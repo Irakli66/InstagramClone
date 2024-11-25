@@ -31,3 +31,34 @@ struct UserMedia: Decodable {
 }
 
 
+extension UserMediaResponse {
+    public static var jsonMock: String {
+        """
+        {
+          "data": [
+            {
+              "id": "media1",
+              "images": {
+                "low_resolution": {
+                  "url": "https://example.com/image1_low.jpg",
+                  "width": 320,
+                  "height": 240
+                }
+              }
+            },
+            {
+              "id": "media2",
+              "images": {
+                "low_resolution": {
+                  "url": "https://example.com/image2_low.jpg",
+                  "width": 320,
+                  "height": 240
+                }
+              }
+            }
+          ]
+        }
+        """
+    }
+}
+

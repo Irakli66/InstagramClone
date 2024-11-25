@@ -20,7 +20,7 @@ final class LikesPageViewModel {
     
     private(set) var sections: [(String, [UserLike])] = []
     
-    private func fetchData(){
+     func fetchData(){
         networkService.fetchData(urlString: "http://localhost:3000/users/self/requested-by", httpMethod: "GET", headers: nil, decoder: JSONDecoder())
         { [weak self] (result: Result<UserLikesResponse, NetworkError>) in
             switch result {
@@ -33,7 +33,7 @@ final class LikesPageViewModel {
         }
     }
     
-    private func addLikesToSections() {
+     func addLikesToSections() {
         let newItems = userLikeArr.prefix(2).map {
             UserLike(profileImageName: $0.profileImageName, message: $0.message, postImageName: $0.postImageName)
         }
