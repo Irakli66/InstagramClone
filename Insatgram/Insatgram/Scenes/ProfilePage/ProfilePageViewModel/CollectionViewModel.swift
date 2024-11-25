@@ -11,7 +11,7 @@ import UIKit
 
 final class CollectionViewModel {
     private let networkService: NetworkServiceProtocol
-    private let urlString = "http://localhost:3000/v1/users/1/media/recent"
+    private let urlString = "http://localhost:3000/users/1/media/recent"
     private var imageArray: [String] = []
     
     init(networkService: NetworkServiceProtocol = NetworkService()) {

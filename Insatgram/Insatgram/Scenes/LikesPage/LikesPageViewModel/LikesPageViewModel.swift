@@ -21,7 +21,7 @@ final class LikesPageViewModel {
     private(set) var sections: [(String, [UserLike])] = []
     
     private func fetchData(){
-        networkService.fetchData(urlString: "http://localhost:3000/v1/users/self/requested-by", httpMethod: "GET", headers: nil, decoder: JSONDecoder())
+        networkService.fetchData(urlString: "http://localhost:3000/users/self/requested-by", httpMethod: "GET", headers: nil, decoder: JSONDecoder())
         { [weak self] (result: Result<UserLikesResponse, NetworkError>) in
             switch result {
             case .success(let userLikeData):
