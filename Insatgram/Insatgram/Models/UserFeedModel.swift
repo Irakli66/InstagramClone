@@ -100,3 +100,78 @@ struct FeedMeta: Decodable {
     let code: Int
 }
 
+extension PostResponse {
+    public static var jsonMock: String {
+        """
+        {
+          "data": [
+            {
+              "caption": {
+                "created_time": "2024-11-22T12:34:56Z",
+                "from": {
+                  "full_name": "John Doe",
+                  "id": "1",
+                  "profile_picture": "https://example.com/profile.jpg",
+                  "username": "johndoe"
+                },
+                "id": "10",
+                "text": "Sample caption text"
+              },
+              "created_time": "2024-11-22T12:34:56Z",
+              "id": "101",
+              "images": [
+                {
+                  "image_url": "https://example.com/image1.jpg"
+                },
+                {
+                  "image_url": "https://example.com/image2.jpg"
+                }
+              ],
+              "likes": {
+                "count": 42,
+                "data": [
+                  {
+                    "full_name": "Jane Smith",
+                    "id": "2",
+                    "profile_picture": "https://example.com/profile2.jpg",
+                    "username": "janesmith"
+                  }
+                ]
+              },
+              "link": "https://example.com/post",
+              "location": {
+                "id": "location123",
+                "latitude": 37.7749,
+                "longitude": -122.4194,
+                "name": "San Francisco"
+              },
+              "user": {
+                "full_name": "John Doe",
+                "id": "1",
+                "profile_picture": "https://example.com/profile.jpg",
+                "username": "johndoe"
+              },
+              "user_has_liked": true,
+              "users_in_photo": [
+                {
+                  "position": {
+                    "x": 0.5,
+                    "y": 0.5
+                  },
+                  "user": {
+                    "full_name": "Alice Johnson",
+                    "id": "3",
+                    "profile_picture": "https://example.com/profile3.jpg",
+                    "username": "alicejohnson"
+                  }
+                }
+              ]
+            }
+          ],
+          "meta": {
+            "code": 200
+          }
+        }
+        """
+    }
+}
