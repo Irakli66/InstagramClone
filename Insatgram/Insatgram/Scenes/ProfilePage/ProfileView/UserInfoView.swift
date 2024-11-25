@@ -97,7 +97,6 @@ final class UserInfoView: UIViewController {
         setupHorizontalStackView()
         setupMainView()
         setupUserLables()
-        view.backgroundColor = UIColor(hex: "#FAFAFA")
     }
     
     private func setupUserLables() {
