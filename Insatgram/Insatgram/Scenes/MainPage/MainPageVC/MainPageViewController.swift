@@ -85,8 +85,15 @@ extension MainPageViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsFeedTableViewCell", for: indexPath) as! NewsFeedTableViewCell
         let currentPost = mainPageViewModel.getPost(at: indexPath.row)
-        cell.configureCell(post: currentPost)
         cell.post = currentPost
+        cell.configureCell(post: currentPost)
+        
+        cell.onLikeButtonTapped = { [weak self] in
+            guard let self = self else { return }
+            self.mainPageViewModel.toggleLike(forPostAt: indexPath.row)
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+        
         return cell
     }
     
