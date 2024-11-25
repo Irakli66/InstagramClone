@@ -46,8 +46,6 @@ final class SearchPageViewModel {
         }
     }
     
-    
-    
     func getImage(at index: Int) -> MediaModel {
         medias[index]
     }
@@ -59,7 +57,6 @@ final class SearchPageViewModel {
     func searchTag(with tagName: String) -> [TagModel] {
         let tagNameLowerCase = tagName.lowercased()
         let filteredTags = tags.filter { $0.name.lowercased() == tagNameLowerCase }
-        print(filteredTags)
         return filteredTags
     }
 }

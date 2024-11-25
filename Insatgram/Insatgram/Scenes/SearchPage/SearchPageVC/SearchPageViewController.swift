@@ -3,17 +3,19 @@
 //  Instagram
 //
 //  Created by irakli kharshiladze on 22.11.24.
-
+ 
 import UIKit
-
+ 
 final class SearchPageViewController: UIViewController {
     private var collectionView: UICollectionView?
     private let searchPageViewModel = SearchPageViewModel()
+    private var timer: Timer?
     
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Search"
         searchBar.backgroundColor = .systemBackground
+        
         return searchBar
     }()
     
@@ -31,14 +33,41 @@ final class SearchPageViewController: UIViewController {
         return view
     }()
     
+    private let tagStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
+    
+    private let tagName: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.textColor = .label
+        return label
+    }()
+    
+    private let tagCount: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .preferredFont(forTextStyle: .caption1)
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .label
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        searchBar.delegate = self
+        navigationController?.navigationBar.topItem?.titleView = searchBar
         
         setupTopView()
         setupCollectionView()
         setupSearchOverlayView()
-        searchBar.delegate = self
+        setupSearchTagAndCount()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,6 +115,7 @@ final class SearchPageViewController: UIViewController {
     private func setupSearchOverlayView() {
         view.addSubview(searchOverlayView)
         searchOverlayView.translatesAutoresizingMaskIntoConstraints = false
+        searchOverlayView.isUserInteractionEnabled = false
         NSLayoutConstraint.activate([
             searchOverlayView.topAnchor.constraint(equalTo: view.topAnchor),
             searchOverlayView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -93,12 +123,23 @@ final class SearchPageViewController: UIViewController {
             searchOverlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    private func setupSearchTagAndCount() {
+        searchOverlayView.addSubview(tagStackView)
+        tagStackView.addArrangedSubview(tagName)
+        tagStackView.addArrangedSubview(tagCount)
+        
+        NSLayoutConstraint.activate([
+            tagStackView.leftAnchor.constraint(equalTo: searchOverlayView.leftAnchor, constant: 20),
+            tagStackView.rightAnchor.constraint(equalTo: searchOverlayView.rightAnchor, constant: -20),
+            tagStackView.topAnchor.constraint(equalTo: searchOverlayView.topAnchor, constant: 150),
+        ])
+    }
 }
-
 extension SearchPageViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        didCancelSearch()
         guard let text = searchBar.text, !text.isEmpty else {
+            print("Search text is empty")
             return
         }
         query(text)
@@ -106,12 +147,22 @@ extension SearchPageViewController: UISearchBarDelegate {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(didCancelSearch))
-        
         searchOverlayView.isHidden = false
+        searchBar.showsCancelButton = true
         UIView.animate(withDuration: 0.1) {
             self.searchOverlayView.alpha = 1
         }
         searchBar.becomeFirstResponder()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(handleTypingFinished), userInfo: searchText, repeats: false)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        didCancelSearch()
+        searchBar.showsCancelButton = false
     }
     
     @objc private func didCancelSearch() {
@@ -125,12 +176,30 @@ extension SearchPageViewController: UISearchBarDelegate {
         }
     }
     
+    @objc private func handleTypingFinished(_ timer: Timer) {
+        guard let searchText = timer.userInfo as? String else { return }
+        query(searchText)
+    }
     
     private func query(_ text: String) {
-        // Implement query
+        let results = searchPageViewModel.searchTag(with: text)
+        if let firstTag = results.first {
+            tagName.text = "#\(firstTag.name)"
+            tagCount.text = "\(firstTag.mediaCount) matches found"
+        } else {
+            tagName.text = "No results found"
+            tagCount.text = ""
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.searchOverlayView.alpha = 1
+            self.searchOverlayView.isHidden = false
+        }
     }
 }
-
+ 
+ 
+ 
 extension SearchPageViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return searchPageViewModel.getMediaCount()
@@ -145,7 +214,7 @@ extension SearchPageViewController: UICollectionViewDelegate, UICollectionViewDa
         return cell
     }
 }
-//ეს ბოლომდე არ მუშაობს, პროპორციები სწორად დავსვვი, მაგრამ ვერტიკალურად ვერ ვსტაკავ პატარებს. ასევე, სწრაფად თუ სქროლავ სურათები იშაფლებასავით, რომელიც გაუთვალისწინებელი ბაგია და არ ვიცი რა იწვევს.
+ 
 extension SearchPageViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.size.width
