@@ -50,13 +50,13 @@ A feature-rich iOS application replicating key functionalities of Instagram. Bui
 - Levan Gorjeladze
 
 ## Requirements
-- iOS [version requirement]
+- iOS
 - Xcode 16
 
 ## Installation
 1. Clone the repository:
    ```bash
-   [git clone https://github.com/your-username/InstaClone.git](https://github.com/Irakli66/InstagramClone.git)
+   (https://github.com/Irakli66/InstagramClone.git)
    ```
 2. Open `InstaClone` in Xcode.
 3. Build and run the project.
