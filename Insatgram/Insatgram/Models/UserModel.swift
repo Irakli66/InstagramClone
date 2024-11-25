@@ -44,3 +44,26 @@ struct User: Decodable {
 
 
 
+
+extension UserResponse {
+    public static var jsonMock: String {
+        """
+        {
+          "data": {
+            "id": "123",
+            "username": "johndoe",
+            "bio": "Photographer & traveler",
+            "counts": {
+              "followed_by": 1500,
+              "follows": 300,
+              "media": 120
+            },
+            "full_name": "John Doe",
+            "profile_picture": "https://example.com/profile.jpg"
+          }
+        }
+        """
+    }
+}
+
+
