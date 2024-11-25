@@ -14,7 +14,7 @@ final class UserInfoViewModel {
     private var user: User?
     private let userId = 1
     private var urlString: String {
-        "http://localhost:3000/v1/users/\(userId)"
+        "http://localhost:3000/users/\(userId)"
     }
     
     init(networkService: NetworkServiceProtocol = NetworkService()) {

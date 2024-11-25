@@ -15,8 +15,8 @@ final class SearchPageViewModel {
     
     var onDataUpdated: (() -> Void)?
     
-    let mediaUrl: String = "http://localhost:3000/v1/media/popular"
-    let tagUrl: String = "http://localhost:3000/v1/tags/search"
+    let mediaUrl: String = "http://localhost:3000/media/popular"
+    let tagUrl: String = "http://localhost:3000/tags/search"
     
     init(networkService: NetworkServiceProtocol = NetworkService()) {
         self.networkService = networkService

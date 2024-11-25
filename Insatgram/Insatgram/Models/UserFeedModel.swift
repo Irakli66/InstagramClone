@@ -9,7 +9,7 @@ import Foundation
 
 struct PostResponse: Decodable {
     let data: [Post]
-    let meta: Meta?
+    let meta: FeedMeta?
 }
 
 struct Post: Decodable {
@@ -96,7 +96,7 @@ struct Position: Decodable {
     let y: Double
 }
 
-struct Meta: Decodable {
+struct FeedMeta: Decodable {
     let code: Int
 }
 

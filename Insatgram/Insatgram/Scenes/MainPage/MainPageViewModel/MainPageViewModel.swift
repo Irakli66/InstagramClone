@@ -18,7 +18,7 @@ final class MainPageViewModel {
     private let networkService: NetworkServiceProtocol
     private var posts: [Post] = []
     private var urlString: String {
-        "http://localhost:3000/v1/users/self/feed"
+        "http://localhost:3000/users/self/feed"
     }
     
     init(networkService: NetworkServiceProtocol = NetworkService(), customDateFormatter: CustomDateFormatterProtocol = CustomDateFormatter()) {
